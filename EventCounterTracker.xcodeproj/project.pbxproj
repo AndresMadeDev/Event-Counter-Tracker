@@ -19,6 +19,8 @@
 		613A5AB32E8380A1001D4AE1 /* CreateEventScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613A5AB22E8380A1001D4AE1 /* CreateEventScreen.swift */; };
 		613A5AB52E838108001D4AE1 /* CustomColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613A5AB42E838108001D4AE1 /* CustomColorPickerView.swift */; };
 		613A5AB72E83852B001D4AE1 /* EventListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613A5AB62E83852B001D4AE1 /* EventListCellView.swift */; };
+		61F390622E8437C100FACCEF /* EventDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F390612E8437C100FACCEF /* EventDetailScreen.swift */; };
+		61F390642E843B7600FACCEF /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F390632E843B7500FACCEF /* TodoListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		613A5AB22E8380A1001D4AE1 /* CreateEventScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventScreen.swift; sourceTree = "<group>"; };
 		613A5AB42E838108001D4AE1 /* CustomColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColorPickerView.swift; sourceTree = "<group>"; };
 		613A5AB62E83852B001D4AE1 /* EventListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListCellView.swift; sourceTree = "<group>"; };
+		61F390612E8437C100FACCEF /* EventDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailScreen.swift; sourceTree = "<group>"; };
+		61F390632E843B7500FACCEF /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +77,8 @@
 				613A5AB02E837F3F001D4AE1 /* HomeScreen.swift */,
 				613A5AB62E83852B001D4AE1 /* EventListCellView.swift */,
 				613A5AB22E8380A1001D4AE1 /* CreateEventScreen.swift */,
+				61F390612E8437C100FACCEF /* EventDetailScreen.swift */,
+				61F390632E843B7500FACCEF /* TodoListView.swift */,
 				613A5AAF2E837E2C001D4AE1 /* Models */,
 				613A5AAE2E837E1C001D4AE1 /* Extension */,
 			);
@@ -174,10 +180,12 @@
 				613A5AA72E837DF8001D4AE1 /* Color-EXT.swift in Sources */,
 				613A5AA82E837DF8001D4AE1 /* ContentView.swift in Sources */,
 				613A5AA92E837DF8001D4AE1 /* EventCounterTrackerApp.swift in Sources */,
+				61F390642E843B7600FACCEF /* TodoListView.swift in Sources */,
 				613A5AAA2E837DF8001D4AE1 /* EventModel.swift in Sources */,
 				613A5AB12E837F3F001D4AE1 /* HomeScreen.swift in Sources */,
 				613A5AAB2E837DF8001D4AE1 /* Onboarding.swift in Sources */,
 				613A5AAC2E837DF8001D4AE1 /* TodoModel.swift in Sources */,
+				61F390622E8437C100FACCEF /* EventDetailScreen.swift in Sources */,
 				613A5AB52E838108001D4AE1 /* CustomColorPickerView.swift in Sources */,
 				613A5AB32E8380A1001D4AE1 /* CreateEventScreen.swift in Sources */,
 				613A5AB72E83852B001D4AE1 /* EventListCellView.swift in Sources */,

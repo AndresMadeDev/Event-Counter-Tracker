@@ -21,7 +21,7 @@ struct HomeScreen: View {
                 ForEach(sampleEvents, id: \.self) { event in
                     VStack {
                         NavigationLink {
-                            Text(event.title)
+                           EventDetailScreen(event: event)
                         } label: {
                             EventListCellView(event: event)
                         }
