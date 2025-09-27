@@ -18,7 +18,7 @@ struct HomeScreen: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                ForEach(sampleEvents, id: \.self) { event in
+                ForEach(events) { event in
                     VStack {
                         NavigationLink {
                            EventDetailScreen(event: event)
@@ -26,6 +26,7 @@ struct HomeScreen: View {
                             EventListCellView(event: event)
                         }
                         .padding(.horizontal)
+                        .buttonStyle(.plain)
                     }
                     .padding(.vertical, 10)
                     .containerRelativeFrame(.vertical, alignment: .center)

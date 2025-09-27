@@ -29,10 +29,15 @@ struct EventDetailScreen: View {
         NavigationStack {
             VStack {
                 VStack(alignment: .leading) {
-                    Text(event.title)
-                        .font(.title)
-                        .bold()
-                        .foregroundStyle(event.hexColor)
+                    if !showEdit {
+                        Text(event.title)
+                            .font(.title)
+                            .bold()
+                            .foregroundStyle(event.hexColor)
+                    } else {
+                        TextField("Event Title: \(event.title)", text: $event.title)
+                            .font(.headline)
+                    }
                     
                     HStack {
                         Text(event.dayOfEvent.formatted(.dateTime.month(.wide).day()))
@@ -54,30 +59,26 @@ struct EventDetailScreen: View {
                                 Text(event.dayComponents(for: Int(timeRemaining)))
                                     .font(.system(size: 50, weight: .bold, design: .rounded))
                                     .minimumScaleFactor(0.3)
+                                    .foregroundStyle(event.hexColor)
                                     .fontWeight(.semibold)
                                     .frame(height: 75)
                                     .frame(maxWidth: .infinity)
-                                    .foregroundStyle(event.hexColor)
-                                    .background(.ultraThinMaterial)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    .glassEffect(.clear, in: .rect(cornerRadius: 20))
                                 Text("Days")
                                     .font(.subheadline)
-                                    .foregroundStyle(Color(.systemGray))
                             }
                             if event.addHour {
                                 VStack {
                                     Text(event.hourComponents(for: Int(timeRemaining)))
                                         .font(.system(size: 50, weight: .bold, design: .rounded))
                                         .minimumScaleFactor(0.3)
+                                        .foregroundStyle(event.hexColor)
                                         .fontWeight(.semibold)
                                         .frame(height: 75)
                                         .frame(maxWidth: .infinity)
-                                        .foregroundStyle(event.hexColor)
-                                        .background(.ultraThinMaterial)
-                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                        .glassEffect(.clear, in: .rect(cornerRadius: 20))
                                     Text("Hours")
                                         .font(.subheadline)
-                                        .foregroundStyle(Color(.systemGray))
                                 }
                             }
                             
@@ -86,15 +87,17 @@ struct EventDetailScreen: View {
                                     Text(event.minutesComponents(for: Int(timeRemaining)))
                                         .font(.system(size: 50, weight: .bold, design: .rounded))
                                         .minimumScaleFactor(0.3)
+                                        .foregroundStyle(event.hexColor)
                                         .fontWeight(.semibold)
                                         .frame(height: 75)
                                         .frame(maxWidth: .infinity)
-                                        .foregroundStyle(event.hexColor)
-                                        .background(.ultraThinMaterial)
-                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                        .glassEffect(.clear, in: .rect(cornerRadius: 20))
+//                                        .foregroundStyle(event.hexColor)
+//                                        .background(.ultraThinMaterial)
+//                                        .clipShape(RoundedRectangle(cornerRadius: 10))
                                     Text("Min")
                                         .font(.subheadline)
-                                        .foregroundStyle(Color(.systemGray))
+//                                        .foregroundStyle(Color(.systemGray))
                                 }
                             }
                             
@@ -103,15 +106,13 @@ struct EventDetailScreen: View {
                                     Text(event.secondsComponents(for: Int(timeRemaining)))
                                         .font(.system(size: 50, weight: .bold, design: .rounded))
                                         .minimumScaleFactor(0.3)
+                                        .foregroundStyle(event.hexColor)
                                         .fontWeight(.semibold)
                                         .frame(height: 75)
                                         .frame(maxWidth: .infinity)
-                                        .foregroundStyle(event.hexColor)
-                                        .background(.ultraThinMaterial)
-                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                        .glassEffect(.clear, in: .rect(cornerRadius: 20))
                                     Text("Sec")
                                         .font(.subheadline)
-                                        .foregroundStyle(Color(.systemGray))
                                 }
                             }
                         }
@@ -149,16 +150,34 @@ struct EventDetailScreen: View {
                 updateCountdown()
             }
             .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Delete", systemImage: "trash") {
+                        showAlert.toggle()
+                    }
+                    .buttonStyle(.glassProminent)
+                    .tint(event.hexColor)
+                }
                 ToolbarItem(placement: .bottomBar) {
                     Button(action: { creatTodo() }, label: {
                         Text("+ Task")
                             .font(.title3)
                             .frame(width: 200)
                     })
-                    .buttonStyle(.glass)
+                    .buttonStyle(.glassProminent)
                     .tint(event.hexColor)
                 }
             }
+            .alert("Delete \(event.title)", isPresented: $showAlert, actions: {
+                Button("Cancel", role: .cancel) {}
+                Button("OK") {
+//                    NotificationManager.shared.removeNotification(for: event)
+                    modelContext.delete(event)
+//                    WidgetCenter.shared.reloadAllTimelines()
+                    dismiss()
+                }
+            }, message: {
+                Text("Are you sure you would like to delete \(event.title)?")
+            })
         }
     }
     
@@ -175,6 +194,12 @@ struct EventDetailScreen: View {
     
     func creatTodo() {
         showCreateTodo.toggle()
+        let newTodo = TodoList(title: "New Task", detail: "", completed: false)
+        if event.todo == nil {
+            event.todo = []
+        }
+        event.todo?.append(newTodo)
+        try? modelContext.save()
 //        WidgetCenter.shared.reloadAllTimelines()
     }
     

@@ -12,6 +12,7 @@ struct EventListCellView: View {
     @Bindable var event: Event
     @State private var timeRemaining: TimeInterval = 0
     @State private var isEventPassed = false
+    @State private var completedPercent: Double = 0
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
@@ -20,6 +21,7 @@ struct EventListCellView: View {
                     Text(event.title)
                         .font(.system(size: 50, weight: .bold, design: .rounded))
                         .multilineTextAlignment(.center)
+//                        .foregroundStyle(.primary)
                     
                     HStack {
                         Text(event.eventType)
@@ -27,6 +29,7 @@ struct EventListCellView: View {
                         Text(Date().formatted(.dateTime.month().day().year()))
                     }
                     .font(.title)
+                    .foregroundStyle(.primary)
                 }
                 
                 VStack {
@@ -45,7 +48,6 @@ struct EventListCellView: View {
                                 //                            .frame(height: 125)
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .foregroundStyle(.white)
                                 .glassEffect(.regular.tint(event.hexColor), in: .rect(cornerRadius: 20))
                             }
                         }
@@ -110,24 +112,32 @@ struct EventListCellView: View {
                     }
                 }
                 
-                if event.todo?.count ?? 0 > 0 {
-                    ProgressView("\(event.completedPercent.formatted(.percent.precision(.fractionLength(0)))) Completed", value: event.completedPercent, total: 1)
-                        .font(.headline)
-                        .fontWeight(.medium)
-                        .tint(.white)
-                        .padding(.vertical)
-                    
-                }
+//                if event.todo?.count ?? 0 > 0 {
+//                    ProgressView("\(completedPercent.formatted(.percent.precision(.fractionLength(0)))) Completed", value: completedPercent, total: 1)
+//                        .animation(.easeInOut, value: completedPercent)
+//                        .font(.headline)
+//                        .fontWeight(.medium)
+//                        .tint(.white)
+//                        .padding(.vertical)
+//                }
             }
             .padding()
             .padding(.bottom)
             .frame(maxWidth: .infinity)
             .foregroundStyle(.white)
+//            .glassEffect(.regular.tint(event.hexColor).interactive(), in: .rect(cornerRadius: 20))
             .glassEffect(.regular.tint(event.hexColor), in: .rect(cornerRadius: 10))
-            .onAppear(perform: updateCountdown)
+            .onAppear {
+                updateCountdown()
+                completedPercent = event.completedPercent
+            }
             .onReceive(timer) { _ in
                 updateCountdown()
             }
+            .onChange(of: event.completedPercent) { _, newValue in
+                completedPercent = newValue
+            }
+            
         
     }
     func updateCountdown() {
