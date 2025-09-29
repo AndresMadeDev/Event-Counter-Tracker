@@ -29,14 +29,13 @@ struct EventDetailScreen: View {
         NavigationStack {
             VStack {
                 VStack(alignment: .leading) {
-                    if !showEdit {
+                    HStack {
+                        Text(event.eventType)
+                            .font(.headline)
                         Text(event.title)
                             .font(.title)
                             .bold()
                             .foregroundStyle(event.hexColor)
-                    } else {
-                        TextField("Event Title: \(event.title)", text: $event.title)
-                            .font(.headline)
                     }
                     
                     HStack {
@@ -92,12 +91,12 @@ struct EventDetailScreen: View {
                                         .frame(height: 75)
                                         .frame(maxWidth: .infinity)
                                         .glassEffect(.clear, in: .rect(cornerRadius: 20))
-//                                        .foregroundStyle(event.hexColor)
-//                                        .background(.ultraThinMaterial)
-//                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    //                                        .foregroundStyle(event.hexColor)
+                                    //                                        .background(.ultraThinMaterial)
+                                    //                                        .clipShape(RoundedRectangle(cornerRadius: 10))
                                     Text("Min")
                                         .font(.subheadline)
-//                                        .foregroundStyle(Color(.systemGray))
+                                    //                                        .foregroundStyle(Color(.systemGray))
                                 }
                             }
                             
@@ -149,6 +148,9 @@ struct EventDetailScreen: View {
             .onReceive(timer) { _ in
                 updateCountdown()
             }
+            .sheet(isPresented: $showEdit, content: {
+                EditDetailScreen(event: event)
+            })
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Delete", systemImage: "trash") {
@@ -170,10 +172,7 @@ struct EventDetailScreen: View {
             .alert("Delete \(event.title)", isPresented: $showAlert, actions: {
                 Button("Cancel", role: .cancel) {}
                 Button("OK") {
-//                    NotificationManager.shared.removeNotification(for: event)
-                    modelContext.delete(event)
-//                    WidgetCenter.shared.reloadAllTimelines()
-                    dismiss()
+                    deleteEvent()
                 }
             }, message: {
                 Text("Are you sure you would like to delete \(event.title)?")
@@ -181,6 +180,14 @@ struct EventDetailScreen: View {
         }
     }
     
+    /// Deletes the current event from the model context and dismisses this screen.
+    func deleteEvent() {
+        // NotificationManager.shared.removeNotification(for: event)
+        modelContext.delete(event)
+        // WidgetCenter.shared.reloadAllTimelines()
+        dismiss()
+    }
+
     func updateCountdown() {
         let eventDate = event.dayOfEvent
         timeRemaining = eventDate.timeIntervalSinceNow
@@ -203,13 +210,13 @@ struct EventDetailScreen: View {
 //        WidgetCenter.shared.reloadAllTimelines()
     }
     
-    func delete(_ indexSet: IndexSet) {
-        for i in indexSet {
-            let todo = event.todo?[i]
-            modelContext.delete(todo!)
-//            WidgetCenter.shared.reloadAllTimelines()
-            
-        }
+    func delete() {
+//        for i in indexSet {
+//            let todo = event.todo?[i]
+//            modelContext.delete(todo!)
+////            WidgetCenter.shared.reloadAllTimelines()
+//            
+//        }
     }
     
     func emptyTodo() {
@@ -224,3 +231,4 @@ struct EventDetailScreen: View {
         EventDetailScreen(event: Event.sample)
     }
 }
+

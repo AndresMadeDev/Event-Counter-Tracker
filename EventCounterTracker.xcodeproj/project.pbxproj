@@ -21,6 +21,7 @@
 		613A5AB72E83852B001D4AE1 /* EventListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613A5AB62E83852B001D4AE1 /* EventListCellView.swift */; };
 		61F390622E8437C100FACCEF /* EventDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F390612E8437C100FACCEF /* EventDetailScreen.swift */; };
 		61F390642E843B7600FACCEF /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F390632E843B7500FACCEF /* TodoListView.swift */; };
+		C1D3A8B02E8ADC790058A97E /* EditDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D3A8AF2E8ADC790058A97E /* EditDetailScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		613A5AB62E83852B001D4AE1 /* EventListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListCellView.swift; sourceTree = "<group>"; };
 		61F390612E8437C100FACCEF /* EventDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailScreen.swift; sourceTree = "<group>"; };
 		61F390632E843B7500FACCEF /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
+		C1D3A8AF2E8ADC790058A97E /* EditDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDetailScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				613A5AB62E83852B001D4AE1 /* EventListCellView.swift */,
 				613A5AB22E8380A1001D4AE1 /* CreateEventScreen.swift */,
 				61F390612E8437C100FACCEF /* EventDetailScreen.swift */,
+				C1D3A8AF2E8ADC790058A97E /* EditDetailScreen.swift */,
 				61F390632E843B7500FACCEF /* TodoListView.swift */,
 				613A5AAF2E837E2C001D4AE1 /* Models */,
 				613A5AAE2E837E1C001D4AE1 /* Extension */,
@@ -189,6 +192,7 @@
 				613A5AB52E838108001D4AE1 /* CustomColorPickerView.swift in Sources */,
 				613A5AB32E8380A1001D4AE1 /* CreateEventScreen.swift in Sources */,
 				613A5AB72E83852B001D4AE1 /* EventListCellView.swift in Sources */,
+				C1D3A8B02E8ADC790058A97E /* EditDetailScreen.swift in Sources */,
 				613A5AAD2E837DF8001D4AE1 /* UIColor-EXT.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

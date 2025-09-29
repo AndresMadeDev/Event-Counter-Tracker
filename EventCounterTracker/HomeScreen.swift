@@ -37,7 +37,7 @@ struct HomeScreen: View {
             .scrollTargetLayout()
             .scrollTargetBehavior(.paging)
             .scrollBounceBehavior(.basedOnSize)
-            .navigationTitle("You have \(sampleEvents.count) events")
+            .navigationTitle("You have \(events.count) events")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showCreateEvent, content: {
                 NavigationStack {
@@ -49,8 +49,7 @@ struct HomeScreen: View {
                     Button("Create Event") {
                         showCreateEvent.toggle()
                     }
-                    .frame(maxWidth: .infinity, alignment: .init(horizontal: .center, vertical: .center))
-                    .buttonStyle(.glass)
+                    .buttonStyle(.glassProminent)
                     .tint(.accentColor)
                 }
             }
