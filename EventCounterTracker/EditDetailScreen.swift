@@ -7,10 +7,13 @@
 
 import SwiftUI
 import Combine
+import UserNotifications
+import SwiftData
 
 struct EditDetailScreen: View {
     @Bindable var event: Event
     @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
     
     @State private var date: Date = Calendar.current.startOfDay(for: .now)
     @State private var selecteeColor: Color = .green
@@ -115,9 +118,10 @@ struct EditDetailScreen: View {
             .onReceive(timer) { _ in
                 updateCountdown()
             }
-            .onDisappear{
-                //            scheduleNotification()
-                //            WidgetCenter.shared.reloadAllTimelines()
+            .onDisappear {
+                Task {
+                    await rescheduleNotification()
+                }
             }
         }
     }
@@ -134,25 +138,93 @@ struct EditDetailScreen: View {
         }
     }
     
-//    func scheduleNotification() {
-//        let content = UNMutableNotificationContent()
-//        content.title = "Event Counter"
-//        content.body = notificationText.isEmpty ? "Get ready for \(event.title)" : notificationText
-//        content.sound = UNNotificationSound.default
-//
-//        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: event.dayOfEvent)
-//        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-//
-//        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-//
-//        UNUserNotificationCenter.current().add(request) { error in
-//            if let error = error {
-//                alertMessage = "Error scheduling notification: \(error.localizedDescription)"
-//            } else {
-//                alertMessage = "\(event.title) was scheduled successfully for \(date.formatted(.dateTime.month().day().year()))"
-//            }
-//            showAlert = true
-//        }
-//    }
+    @MainActor
+    private func rescheduleNotification() async {
+        let center = UNUserNotificationCenter.current()
+
+        // Check authorization status
+        let status = await getAuthorizationStatus(center: center)
+        switch status {
+        case .authorized, .provisional, .ephemeral:
+            break
+        case .notDetermined:
+            do {
+                let granted = try await requestAuthorization(center: center)
+                if !granted { return }
+            } catch {
+                return
+            }
+        case .denied:
+            return
+        @unknown default:
+            return
+        }
+
+        // Remove existing notification if any
+        if let id = event.notificationID {
+            center.removePendingNotificationRequests(withIdentifiers: [id])
+            center.removeDeliveredNotifications(withIdentifiers: [id])
+        }
+
+        // Only schedule for a future date
+        let triggerDate = event.dayOfEvent
+        if triggerDate <= Date() { return }
+
+        // Build date components according to the event's time granularity
+        var components: Set<Calendar.Component> = [.year, .month, .day]
+        if event.addHour { components.insert(.hour) }
+        if event.addMinutes { components.insert(.minute) }
+        if event.addSeconds { components.insert(.second) }
+
+        let triggerComponents = Calendar.current.dateComponents(components, from: triggerDate)
+
+        // Create content
+        let content = UNMutableNotificationContent()
+        content.title = "Event Counter"
+        let bodyText = notificationText.isEmpty ? "Get ready for \(event.title)" : notificationText
+        content.body = bodyText
+        content.sound = UNNotificationSound.default
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
+        let identifier = UUID().uuidString
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
+        do {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                center.add(request) { error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: ())
+                    }
+                }
+            }
+            // Save the new identifier on the event
+            event.notificationID = identifier
+            try? modelContext.save()
+        } catch {
+            // Swallow errors silently in edit flow
+        }
+    }
+
+    private func getAuthorizationStatus(center: UNUserNotificationCenter) async -> UNAuthorizationStatus {
+        await withCheckedContinuation { continuation in
+            center.getNotificationSettings { settings in
+                continuation.resume(returning: settings.authorizationStatus)
+            }
+        }
+    }
+
+    private func requestAuthorization(center: UNUserNotificationCenter) async throws -> Bool {
+        try await withCheckedThrowingContinuation { continuation in
+            center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: granted)
+                }
+            }
+        }
+    }
 }
 

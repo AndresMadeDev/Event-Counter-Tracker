@@ -20,6 +20,7 @@ class Event {
     var addHour: Bool = true
     var addMinutes: Bool = true
     var addSeconds: Bool = true
+    var notificationID: String? = nil
     @Relationship(deleteRule: .cascade) var todo: [TodoList]?
     
     init(title: String, eventColor: String, dayOfEvent: Date, eventType: String, addList: Bool, addTime: Bool, addHours: Bool, addMinutes: Bool, addSeconds: Bool) {

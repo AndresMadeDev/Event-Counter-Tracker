@@ -125,7 +125,7 @@ struct EventListCellView: View {
             .padding(.bottom)
             .frame(maxWidth: .infinity)
             .foregroundStyle(.white)
-            .glassEffect(.regular.tint(event.hexColor), in: .rect(cornerRadius: 10))
+            .glassEffect(.regular.tint(event.hexColor.opacity(0.6)), in: .rect(cornerRadius: 10))
             .onAppear {
                 updateCountdown()
                 completedPercent = event.completedPercent

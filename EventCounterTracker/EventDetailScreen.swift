@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 import SwiftData
+import UserNotifications
 
 struct EventDetailScreen: View {
     @Environment(\.modelContext) var modelContext
@@ -182,7 +183,12 @@ struct EventDetailScreen: View {
     
     /// Deletes the current event from the model context and dismisses this screen.
     func deleteEvent() {
-        // NotificationManager.shared.removeNotification(for: event)
+        // Remove any scheduled notifications for this event
+        if let id = event.notificationID {
+            let center = UNUserNotificationCenter.current()
+            center.removePendingNotificationRequests(withIdentifiers: [id])
+            center.removeDeliveredNotifications(withIdentifiers: [id])
+        }
         modelContext.delete(event)
         // WidgetCenter.shared.reloadAllTimelines()
         dismiss()
@@ -210,14 +216,6 @@ struct EventDetailScreen: View {
 //        WidgetCenter.shared.reloadAllTimelines()
     }
     
-    func delete() {
-//        for i in indexSet {
-//            let todo = event.todo?[i]
-//            modelContext.delete(todo!)
-////            WidgetCenter.shared.reloadAllTimelines()
-//            
-//        }
-    }
     
     func emptyTodo() {
         if ((event.todo?.isEmpty) != nil) {
